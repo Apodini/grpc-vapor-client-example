@@ -1,14 +1,15 @@
 import NIO
 import Foundation
 
-let host = "127.0.0.1:8080"
+let host = "127.0.0.1"
+let port = 8080
 let group = MultiThreadedEventLoopGroup(numberOfThreads: 1)
 
 defer {
     try! group.syncShutdownGracefully()
 }
 
-let restClient = RESTClient(eventLoop: group.next())
+let restClient = RESTThermostatClient(eventLoop: group.next())
 //let thermostat = restClient.getThermostat(id: "528CE717-7A6E-48E4-A2EC-61AC3BCB3562")
 //let thermostats = restClient.getThermostatIds()
 //let measurements = restClient.getMeasurements(id: "528CE717-7A6E-48E4-A2EC-61AC3BCB3562")

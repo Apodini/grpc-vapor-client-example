@@ -2,7 +2,7 @@ import Alamofire
 import NIO
 import Foundation
 
-struct RESTClient {
+struct RESTThermostatClient: ThermostatClient {
 
     var eventLoop: EventLoop
 
