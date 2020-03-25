@@ -8,7 +8,7 @@ struct RESTThermostatClient: ThermostatClient {
 
     func getThermostat(id: String) -> EventLoopFuture<Thermostat> {
         let request = AF
-            .request("http:\(host)/thermostat/\(id)", method: .get)
+            .request("http:\(host):\(port)/thermostat/\(id)", method: .get)
 
         let promise = eventLoop.makePromise(of: Thermostat.self)
 
@@ -24,7 +24,7 @@ struct RESTThermostatClient: ThermostatClient {
 
     func getThermostatIds() -> EventLoopFuture<[String]> {
         let request = AF
-            .request("http:\(host)/thermostatIds", method: .get)
+            .request("http:\(host):\(port)/thermostatIds", method: .get)
 
         let promise = eventLoop.makePromise(of: [String].self)
 
@@ -40,7 +40,7 @@ struct RESTThermostatClient: ThermostatClient {
 
     func getMeasurements(id: String) -> EventLoopFuture<[Measurement]> {
         let request = AF
-            .request("http:\(host)/measurements/\(id)", method: .get)
+            .request("http:\(host):\(port)/measurements/\(id)", method: .get)
 
         let promise = eventLoop.makePromise(of: [Measurement].self)
 
@@ -56,7 +56,7 @@ struct RESTThermostatClient: ThermostatClient {
 
     func uploadMeasurement(measurement: Measurement) -> EventLoopFuture<Measurement> {
         let request = AF
-            .request("http:\(host)/measurement", method: .post, parameters: measurement.dictionary ?? [:], encoding: JSONEncoding.default)
+            .request("http:\(host):\(port)/measurement", method: .post, parameters: measurement.dictionary ?? [:], encoding: JSONEncoding.default)
 
         let promise = eventLoop.makePromise(of: Measurement.self)
 
@@ -73,7 +73,7 @@ struct RESTThermostatClient: ThermostatClient {
     func calculateStatistics(measurements: [Measurement]) -> EventLoopFuture<MeasurementStats> {
         let measurementDict = Measurements(measurements: measurements)
         let request = AF
-            .request("http:\(host)/measurementStats", method: .post, parameters: measurementDict.dictionary ?? [:], encoding: JSONEncoding.default)
+            .request("http:\(host):\(port)/measurementStats", method: .post, parameters: measurementDict.dictionary ?? [:], encoding: JSONEncoding.default)
 
         let promise = eventLoop.makePromise(of: MeasurementStats.self)
 
