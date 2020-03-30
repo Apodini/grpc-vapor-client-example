@@ -4,6 +4,19 @@ import NIO
 import NIOSSL
 
 class GRPCThermostatClient: ThermostatClient {
+
+    var client: ThermostatServiceClient
+
+    init(group: EventLoopGroup) throws {
+        let certificate = try NIOSSLCertificate.fromPEMBytes(Array(sampleCert.utf8))
+        let channel = ClientConnection
+            .secure(group: group)
+            .withTLS(serverHostnameOverride: "localhost")
+            .withTLS(trustRoots: NIOSSLTrustRoots.certificates(certificate))
+            .connect(host: host, port: port)
+        client = ThermostatServiceClient(channel: channel)
+    }
+
     func getThermostat(id: String) -> EventLoopFuture<Thermostat> {
         var thermostatId = _ThermostatID()
         thermostatId.id = id
@@ -91,16 +104,4 @@ class GRPCThermostatClient: ThermostatClient {
             }
     }
 
-    var client: ThermostatServiceClient
-
-    init(group: EventLoopGroup) throws {
-        let certificate = try NIOSSLCertificate.fromPEMFile(FileManager.default.currentDirectoryPath + "/cert.pem")
-        let channel = ClientConnection
-//            .insecure(group: group)
-            .secure(group: group)
-            .withTLS(serverHostnameOverride: "localhost")
-            .withTLS(trustRoots: NIOSSLTrustRoots.certificates(certificate))
-            .connect(host: host, port: port)
-        client = ThermostatServiceClient(channel: channel)
-    }
 }
